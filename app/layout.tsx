@@ -3,6 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import React from "react";
+import { ThemeProvider } from "@/components/providers/theme-providers";
+import { ModeToggle } from "@/components/mode-toggle";
+import { cn } from "@/lib/utils";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,9 +27,22 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode; }>) {
   return (
     <ClerkProvider>
-      <html lang="en"> 
-        <body >
+      <html lang="en" suppressHydrationWarning> 
+        <body className={cn( /* added cn to contain multiple classnames */
+          `${geistSans.variable} ${geistMono.variable} antialiased`, 
+          "bg-white dark:bg-[#313338]" /* if light mode, bg-white but if darkmode dark:bg-[#313338] */
+        )}>
+          <ThemeProvider /* This component is derived from components/providers/theme-provider.tsx */
+          attribute={"class"}
+          defaultTheme={"dark"} /* the default theme */
+          enableSystem={false}
+          storageKey="discord-theme"/* key to store your theme value */
+          >
+
+          
           {children}
+          <ModeToggle />
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>
