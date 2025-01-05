@@ -8,7 +8,103 @@ generator client {
   provider = "prisma-client-js"
 }
 
+//This allows you to pick the environment variable containing your connected database url
+//provider determines what kind of database it is
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+//Setting up our data models, this is the model stage in the MVC
+model Profile{
+  id String @id @default(uuid()) //id is a default string and is the primary key
+  userId String @unique//userId will come from clerk. the values beginning with @ are decorators
+  name String
+  
+  members Member[] //members is an array of members that the profile is a part of, and this is a one to many relationship
+
+  //we need to connect the profile to the channel model
+  channels Channel[] //channels is an array of channels that the profile is a part of, and this is a one to many relationship
+
+  //we need to connect the profile to the server model
+  servers Server[] //servers is an array of servers that the profile is a part of, and this is a one to many relationship
+  
+  imageUrl String @db.Text //imageUrl is a string that will be stored as text in the database, but db.Text is a special type of String that can store more characters
+  email String @db.Text
+  createdAt DateTime @default(now()) //createdAt is a date time that will be set to the current time when a new profile is created
+  updatedAt DateTime @updatedAt //updatedAt is a date time that will be set to the current time when a profile is updated
+}
+
+//this model is for the various servers within the discord app
+model Server{
+  id String @id @default(uuid())
+  name String
+  imageUrl String @db.Text
+  inviteCode String @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  members Member[] //members is an array of members that are part of the server, and this is a one to many relationship
+
+  //we need to connect the server to the channel model
+  channels Channel[] //channels is an array of channels that are part of the server, and this is a one to many relationship
+
+  //we need to connect the server to the profile model
+  profileId String
+  //this syntax means that the profileId field in the server model references the id field in the profile model,
+  //and if a profile is deleted, all "servers associated with that profile" will also be deleted
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade) 
+  @@index([profileId])
+}
+
+//this is an enum that defines the different roles/"types of roles" that a member can have in a server
+enum MemberRole {
+  ADMIN
+  MODERATOR
+  GUEST
+}
+
+//this model is for the members of the server, the difference between members and profiles is that members are the users that are part of a server and profile is the user's profile
+model Member{
+  id String @id @default(uuid())
+  role MemberRole @default(GUEST) //role is an enum that can be either ADMIN, MODERATOR, or GUEST
+
+    
+  serverId String
+  server Server @relation(fields: [serverId], references: [id], onDelete: Cascade) //the serverId field in the member model references the id field in the server model
+
+
+  profileId String
+  profile Profile @relation(fields: [profileId], references : [id], onDelete: Cascade) // the profileId field in the member model references the id field in the profile model
+  
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([profileId])
+  @@index([serverId])
+}
+
+enum ChannelType {
+  TEXT 
+  AUDIO
+  VIDEO
+}
+
+model Channel{
+  id String @id @default(uuid())
+  name String
+  type ChannelType @default(TEXT)
+
+  profileId String
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  serverId String
+  server Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([profileId])
+  @@index([serverId])
 }
