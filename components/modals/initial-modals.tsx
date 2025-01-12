@@ -24,6 +24,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
+import FileUpload from "@/components/file-upload";
 
 //zod schema for the form validation
 const formSchema = z.object({
@@ -67,7 +68,7 @@ const InitialModal = () => {
     }
 
     return  <Dialog open>
-        <DialogContent className="bg-white text-black p-0 overflow-hidden">
+        <DialogContent className="bg-white text-black p-0 overflow-hidden"> 
             <DialogHeader className="pt-8 px-6">
                 <DialogTitle className="text-2xl font-bold text-center ">
                     Customize your profile.
@@ -80,7 +81,21 @@ const InitialModal = () => {
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
                     <div className="space-y-8 px-6">
                         <div className="flex items-center text-center justify-center ">
-                            TODO: Image Upload
+                            <FormField 
+                            control={form.control}
+                            name="imageUrl"
+                            render={({field}) => (
+                                <FormItem>
+                                    <FormControl>
+                                        <FileUpload 
+                                            endpoint="serverImage"
+                                            value={field.value}
+                                            onChange={field.onChange}
+                                        />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                            />
                         </div>
                         <FormField 
                         control={form.control}
