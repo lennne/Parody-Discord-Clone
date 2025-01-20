@@ -6,6 +6,8 @@ import React from "react";
 import { ThemeProvider } from "@/components/providers/theme-providers";
 import { ModeToggle } from "@/components/mode-toggle";
 import { cn } from "@/lib/utils";
+import { ModalProvider } from '@/components/providers/modal-provider';
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,7 +41,7 @@ export default function RootLayout({
           storageKey="discord-theme"/* key to store your theme value */
           >
 
-          
+          <ModalProvider />
           {children}
           
           </ThemeProvider>

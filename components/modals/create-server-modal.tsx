@@ -24,9 +24,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
 import FileUpload from "@/components/file-upload";
 import { useRouter } from "next/navigation";
+import { useModal } from "@/hooks/use-modal-store";
 
 
 //zod schema for the form validation
@@ -39,17 +39,11 @@ const formSchema = z.object({
     })
 })
 
-const InitialModal = () => {
+export const CreateServerModal = () => {
+    const {isOpen, onClose, type } = useModal();
 
     const router = useRouter();
-
-    const [isMounted, setIsMounted] = useState(false); //check if the component is mounted
-    //useEffect hook to set the isMounted state to true when the component is mounted
-    useEffect(() => {
-        setIsMounted(true);    
-    }, []);
-
-
+    const isModalOpen = isOpen && type === "createServer";   
 
     //reacts hook form which is used to manage the form state
     const form = useForm({
@@ -67,19 +61,20 @@ const InitialModal = () => {
             await axios.post("/api/servers", values);
             form.reset();
             router.refresh();
-            window.location.reload();
+            onClose();
         }catch(error){
             console.log(error);
         }
 
     }
 
-    //if the component is not mounted, return null
-    if(!isMounted) {
-        return null;
+    const handleClose = () => {
+        form.reset();
+        onClose();
     }
 
-    return  <Dialog open>
+
+    return  <Dialog open={isModalOpen} onOpenChange={handleClose}>
         <DialogContent className="bg-white text-black p-0 overflow-hidden"> 
             <DialogHeader className="pt-8 px-6">
                 <DialogTitle className="text-2xl font-bold text-center ">
@@ -145,6 +140,5 @@ const InitialModal = () => {
             </Form>
         </DialogContent>
     </Dialog>
+    
 }
- 
-export default InitialModal;

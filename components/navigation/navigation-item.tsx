@@ -12,7 +12,7 @@ interface NavigationItemProps{
     name: string;
 };
 
-const NavigationItem = ({
+export const NavigationItem = ({
     id,
     imageUrl,
     name
@@ -54,5 +54,3 @@ const NavigationItem = ({
         </ActionToolTip>
      )
 }
- 
-export default NavigationItem;

@@ -4,8 +4,8 @@ import { redirect } from "next/navigation";
 import NavigationAction from "./navigation-action";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import NavigationItem from "@/components/navigation/navigation-item";
-import { ModeToggle } from "../mode-toggle";
+import { NavigationItem } from "@/components/navigation/navigation-item";
+import { ModeToggle } from "@/components/mode-toggle";
 import { UserButton } from "@clerk/nextjs";
 
 export const NavigationSidebar = async () => {
@@ -27,7 +27,7 @@ export const NavigationSidebar = async () => {
         }
     });
 
-    return(
+    return (
         <div className="space-y-4 flex flex-col items-center h-full text-primary w-full dark:bg-[#1e1f22] py-3">
             <NavigationAction />
             <Separator 
@@ -55,5 +55,5 @@ export const NavigationSidebar = async () => {
             />
             </div>
         </div>
-    )
+    ); 
 }
