@@ -21,11 +21,11 @@ import axios from "axios";
 
 
 
-export const InviteModal = () => {
+export const MembersModal = () => {
     const {onOpen, isOpen, onClose, type, data } = useModal();
     const origin = useOrigin();
     
-    const isModalOpen = isOpen && type === "invite";   
+    const isModalOpen = isOpen && type === "members";   
     const { server } = data;
 
     const [copied, setCopied] = useState(false);
@@ -59,7 +59,7 @@ export const InviteModal = () => {
         <DialogContent className="bg-white text-black p-0 overflow-hidden"> 
             <DialogHeader className="pt-8 px-6">
                 <DialogTitle className="text-2xl font-bold text-center ">
-                    Invite Friends.
+                    Manage Members
                 </DialogTitle> 
             </DialogHeader>
           <div className="p-6">
