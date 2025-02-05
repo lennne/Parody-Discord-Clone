@@ -12,7 +12,7 @@ const ServerIdLayout = async ({
         params: { serverId: string};
     }) => {
         const profile = await currentProfile();
-        const { serverId } = await params;
+        
         if(!profile){
             return RedirectToSignIn;
         }
@@ -22,7 +22,7 @@ const ServerIdLayout = async ({
                 //it's not enough that we're geting only the serverId, someone that knows the serverId
                 //someone that knows the serverId can load all the channels and messages for that server
                 //we need to confirm that inside the members of the server we have a matching profile with the current profileId
-                id: serverId, 
+                id: params.serverId, 
                 members: {
                     some: {
                         profileId: profile.id
@@ -38,7 +38,7 @@ const ServerIdLayout = async ({
      return ( 
         <div className="h-full">
             <div className=" md:flex fixed h-full w-60 z-20 flex-col inset-y-0">
-                <ServerSidebar serverId={serverId}/>
+                <ServerSidebar serverId={params.serverId}/>
             </div>
             <main className="h-full md:pl-60">
                 {children}
