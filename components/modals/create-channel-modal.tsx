@@ -34,9 +34,6 @@ const formSchema = z.object({
     name: z.string().min(1, {
         message: "Server name is required."
     }),
-    imageUrl: z.string().min(1, {
-        message: "Server image is required."
-    })
 })
 
 export const CreateChannelModal = () => {
@@ -50,7 +47,6 @@ export const CreateChannelModal = () => {
         resolver: zodResolver(formSchema), //use the zod schema for validation
         defaultValues: {
             name: "",
-            imageUrl: ""
         }
     });
 
@@ -87,23 +83,6 @@ export const CreateChannelModal = () => {
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
                     <div className="space-y-8 px-6">
-                        <div className="flex items-center text-center justify-center ">
-                            <FormField 
-                            control={form.control}
-                            name="imageUrl"
-                            render={({field}) => (
-                                <FormItem>
-                                    <FormControl>
-                                        <FileUpload 
-                                            endpoint="serverImage"
-                                            value={field.value}
-                                            onChange={field.onChange}
-                                        />
-                                    </FormControl>
-                                </FormItem>
-                            )}
-                            />
-                        </div>
                         <FormField 
                         control={form.control}
                         name = "name"
