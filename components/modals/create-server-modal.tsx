@@ -74,7 +74,7 @@ export const CreateServerModal = () => {
     }
 
 
-    return  <Dialog open={isModalOpen} onOpenChange={handleClose}>
+    return  (<Dialog open={isModalOpen} onOpenChange={handleClose}>
         <DialogContent className="bg-white text-black p-0 overflow-hidden"> 
             <DialogHeader className="pt-8 px-6">
                 <DialogTitle className="text-2xl font-bold text-center ">
@@ -140,5 +140,5 @@ export const CreateServerModal = () => {
             </Form>
         </DialogContent>
     </Dialog>
-    
+    )    
 }
