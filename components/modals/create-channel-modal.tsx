@@ -8,7 +8,6 @@ import { useForm } from "react-hook-form";
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle
@@ -24,16 +23,22 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import FileUpload from "@/components/file-upload";
 import { useRouter } from "next/navigation";
 import { useModal } from "@/hooks/use-modal-store";
+import { ChannelType } from "@prisma/client";
 
 
 //zod schema for the form validation
 const formSchema = z.object({
     name: z.string().min(1, {
-        message: "Server name is required."
-    }),
+        message: "Channel name is required."
+    }).refine(
+        name => name!== "general",
+        {
+            message: "Channel name cannot be general",
+        }
+    ),
+    type: z.nativeEnum(ChannelType)
 })
 
 export const CreateChannelModal = () => {
@@ -74,11 +79,8 @@ export const CreateChannelModal = () => {
         <DialogContent className="bg-white text-black p-0 overflow-hidden"> 
             <DialogHeader className="pt-8 px-6">
                 <DialogTitle className="text-2xl font-bold text-center ">
-                    Customize your profile.
+                    Create Channel
                 </DialogTitle>
-                <DialogDescription className="text-center text-zinc-500">
-                    Give your a server a personality with a name and an Image. You can always change this later.
-                </DialogDescription>
             </DialogHeader>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
@@ -91,13 +93,13 @@ export const CreateChannelModal = () => {
                                 <FormLabel
                                 className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70"
                                 >
-                                    Server name
+                                    Channel name.
                                 </FormLabel>
                                 <FormControl>
                                     <Input 
                                     disabled={isLoading}
                                     className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
-                                    placeholder="Enter server name"
+                                    placeholder="Enter channel name"
                                     {...field}
                                     />
                                 </FormControl>
