@@ -92,11 +92,13 @@ export const ServerHeader = ({
                         />
                     </DropdownMenuItem>
                 )}
+                
                  {!isAdmin && (
                     <DropdownMenuItem 
                     className=" px-3 py-2 text-sm dark:text-rose-500 dark:hover:text-white dark:hover:bg-rose-500 cursor-pointer"
+                    onClick={() => onOpen("leaveServer", { server  })}
                     >
-                        Logout
+                        Leave Server
                         <LogOut
                         className="h-4 w-43 ml-auto"
                         />
