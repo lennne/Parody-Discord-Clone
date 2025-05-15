@@ -27,7 +27,7 @@ export const ServerHeader = ({
             asChild 
             >
                 <button 
-                className="w-full text-md font-semibold px-3 flex items-center h-12 border-neutral-200 
+                className="w-full text-md font-semibold px-3 flex items-center h-12 border-neutral-200
                 dark:border-neutral-800 border-b-2 hover:bg-zinc-700/10 dark:hover:bg-zinc-700/50 transition"
                 >
                     {server.name}
@@ -35,7 +35,7 @@ export const ServerHeader = ({
                 </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent 
-            className="w-56 text-xs m-1 rounded-sm font-medium text-black dark:text-neutral-400 p-2  dark:bg-black space-y-[2px]"
+            className="w-56 text-xs m-1 z-10 rounded-sm font-medium text-black dark:text-neutral-400 p-2  dark:bg-black space-y-[2px]"
             >
                 {isModerator && (
                     <DropdownMenuItem 
