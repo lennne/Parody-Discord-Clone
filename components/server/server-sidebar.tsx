@@ -7,12 +7,14 @@ import { redirect } from "next/navigation";
 
 //UI Components
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator"
+import { Separator } from "@/components/ui/separator"  
 import { Hash, Mic, ShieldAlert, ShieldCheck, Videotape } from "lucide-react";
 
 //Custom UI Components
 import { ServerHeader } from "./server-header";
 import { ServerSearch } from "./server-search";
+import { text } from "stream/consumers";
+import ServerSection from "./server-section";
 
 
 interface ServerSidebarProps {
@@ -127,6 +129,18 @@ export const ServerSidebar = async ({serverId}: ServerSidebarProps) => {
                     }
                     />
                     
+                    {/* Separator for separating UIs */}
+                    <Separator className="bg-zinc-200 dark:bg-zinc-700 rounded-md my-2 "/>
+                    {!!textChannels?.length && (
+                        <div className="mb-2">
+                            <ServerSection
+                            sectionType="channels"
+                            channelType={ChannelType.TEXT}
+                            role={role}
+                            label="Text Channels"
+                            />
+                        </div>
+                    )}
                 </div>
             </ScrollArea>
         </div>
