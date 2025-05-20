@@ -1,9 +1,12 @@
 "use client"
 
 import { Search } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CommandDialog, CommandEmpty, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { CommandGroup } from "cmdk";
+
+import { useParams, useRouter } from "next/navigation";
+
 
 interface ServerSearchProps {    
     data: {
@@ -19,6 +22,40 @@ interface ServerSearchProps {
 
 export const ServerSearch = ({data}: ServerSearchProps) => {
     const [open, setOpen] = useState(false);
+
+
+    const router = useRouter();
+    const params = useParams();
+
+    //this is a useEffect made to run everytime the application opens
+    useEffect(()=>{
+
+        //this function listens for keyboard events, specifically, the k and ctrl or command key
+        const down = (e: KeyboardEvent) => {
+            if( e.key === "k" && (e.metaKey || e.ctrlKey)){
+                e.preventDefault();
+                setOpen((open) => !open);
+            }
+        }
+
+        //attach the event listener to the specified html component
+        document.addEventListener("keydown", down);
+
+        //make sure to return a remove listener since this will execute only when the component is removed from the DOM tree
+        return () => document.removeEventListener("keydown", down);
+    },[])
+
+
+    const onClick = ({ id, type} : {id : string, type: "channel" | "member"}) => {
+        setOpen(false);
+            if(type === "channel"){
+                router.push(`/servers/${params?.serverId}/conversations/${id}`)
+            }
+            if(type === "member"){
+                router.push(`/servers/${params?.serverId}/channels/${id}`)
+            }
+    }
+
     return (
        <>
         { /* Search Button which calls the Search Bar UI */}  
@@ -51,7 +88,7 @@ export const ServerSearch = ({data}: ServerSearchProps) => {
                         <CommandGroup key={label} heading={label}>
                             {data?.map(({id, icon, name }) => {
                                 return (
-                                    <CommandItem key={id} >
+                                    <CommandItem key={id} onSelect={() => onClick({id, type})}>
                                         {icon} <span>{name}</span>
                                     </CommandItem>
                                 )

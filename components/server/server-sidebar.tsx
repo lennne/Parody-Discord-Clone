@@ -1,11 +1,19 @@
+//Functionality Components
 import { currentProfile } from "@/lib/current-profile";  
 import { db } from "@/lib/db";
 import { ChannelType, MemberRole } from "@prisma/client";
 import { redirect } from "next/navigation";
-import { ServerHeader } from "./server-header";
+
+
+//UI Components
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator"
+import { Hash, Mic, ShieldAlert, ShieldCheck, Videotape } from "lucide-react";
+
+//Custom UI Components
+import { ServerHeader } from "./server-header";
 import { ServerSearch } from "./server-search";
-import { Hash, Mic, ShieldAlert, ShieldCheck, ShieldCheckIcon, Videotape } from "lucide-react";
+
 
 interface ServerSidebarProps {
     serverId: string;
@@ -20,8 +28,9 @@ const iconMap =  {
 const roleIconMap = {
     [MemberRole.GUEST]: null,
     [MemberRole.MODERATOR]: <ShieldCheck className="h-4 w-4 ml-2 text-indigo-500" />,
-    [MemberRole.ADMIN]: <ShieldAlert className="h-4 w-4 ml-2 text-indigo-500" />
+    [MemberRole.ADMIN]: <ShieldAlert className="h-4 w-4 ml-2 text-rose-500" />
 }
+
 
 export const ServerSidebar = async ({serverId}: ServerSidebarProps) => {
     const profile = await currentProfile();
@@ -76,6 +85,7 @@ export const ServerSidebar = async ({serverId}: ServerSidebarProps) => {
             />
             <ScrollArea className="flex-1 px-3">
                 <div className="mt-2">
+                    {/* Component which displays the server search dialog */}
                     <ServerSearch data={[
                         {
                             label: "Text Channels",
