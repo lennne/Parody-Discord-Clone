@@ -15,6 +15,7 @@ import { ServerHeader } from "./server-header";
 import { ServerSearch } from "./server-search";
 import { text } from "stream/consumers";
 import ServerSection from "./server-section";
+import ServerChannel from "./server-channel";
 
 
 interface ServerSidebarProps {
@@ -131,7 +132,7 @@ export const ServerSidebar = async ({serverId}: ServerSidebarProps) => {
                     
                     {/* Separator for separating UIs */}
                     <Separator className="bg-zinc-200 dark:bg-zinc-700 rounded-md my-2 "/>
-                    {!!textChannels?.length && (
+                    {!!textChannels?.length && ( 
                         <div className="mb-2">
                             <ServerSection
                             sectionType="channels"
@@ -139,6 +140,14 @@ export const ServerSidebar = async ({serverId}: ServerSidebarProps) => {
                             role={role}
                             label="Text Channels"
                             />
+                            {textChannels.map((channel) => (
+                                <ServerChannel
+                                    key={channel.id}
+                                    channel={channel}
+                                    role={role}
+                                    server={server}
+                                />
+                            ))}
                         </div>
                     )}
                 </div>
