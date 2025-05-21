@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { Channel, ChannelType, MemberRole, Server } from "@prisma/client";
-import { Edit, Hash, Mic, Trash, VideoIcon } from "lucide-react";
+import { Edit, Hash, Lock, Mic, Trash, VideoIcon } from "lucide-react";
 import { useParams, useRouter} from "next/navigation";
 import { ActionToolTip } from "../action-tooltip";
 
@@ -37,6 +37,7 @@ const ServerChannel = ({channel, server, role}: ServerChannelProps) => {
             )}>
                 {channel.name}
             </p>
+            {/* for all other channels render delete and edit  */}
             {channel.name !== "general" && role !== MemberRole.GUEST && (
                 <div className="ml-auto flex items-center gap-x-2">
                     <ActionToolTip label="Edit">
@@ -51,6 +52,14 @@ const ServerChannel = ({channel, server, role}: ServerChannelProps) => {
                     </ActionToolTip>
                 </div>
             )}
+            {/* If channel name is general render the lock icon */}
+            {channel.name === "general" && (
+                <Lock 
+                className="ml-auto w-4 h-4 text-zinc-500 dark:text-zinc-400"
+                />
+            )
+
+            }
         </button>
     )
 }

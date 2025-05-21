@@ -132,8 +132,11 @@ export const ServerSidebar = async ({serverId}: ServerSidebarProps) => {
                     
                     {/* Separator for separating UIs */}
                     <Separator className="bg-zinc-200 dark:bg-zinc-700 rounded-md my-2 "/>
+
+                    {/* UI for separating the text Channels */}
                     {!!textChannels?.length && ( 
                         <div className="mb-2">
+                               {/* Beggining of the text channels section for the server sidebar */}
                             <ServerSection
                             sectionType="channels"
                             channelType={ChannelType.TEXT}
@@ -141,6 +144,48 @@ export const ServerSidebar = async ({serverId}: ServerSidebarProps) => {
                             label="Text Channels"
                             />
                             {textChannels.map((channel) => (
+                                <ServerChannel
+                                    key={channel.id}
+                                    channel={channel}
+                                    role={role}
+                                    server={server}
+                                />
+                            ))}
+                        </div>
+                    )}
+
+                    {/* UI for separating the audio Channels */}
+                     {!!audioChannels?.length && ( 
+                        <div className="mb-2">
+                               {/* Beggining of the audio channels section for the server sidebar */}
+                            <ServerSection
+                            sectionType="channels"
+                            channelType={ChannelType.TEXT}
+                            role={role}
+                            label="Voice Channels"
+                            />
+                            {audioChannels.map((channel) => (
+                                <ServerChannel
+                                    key={channel.id}
+                                    channel={channel}
+                                    role={role}
+                                    server={server}
+                                />
+                            ))}
+                        </div>
+                    )}
+
+                    {/* UI for separating the video Channels */}
+                       {!!videoChannels?.length && ( 
+                        <div className="mb-2">
+                            {/* Beggining of the video channels section for the server sidebar */}
+                            <ServerSection
+                            sectionType="channels"
+                            channelType={ChannelType.TEXT}
+                            role={role}
+                            label="Video Channels"
+                            />
+                            {videoChannels.map((channel) => (
                                 <ServerChannel
                                     key={channel.id}
                                     channel={channel}
