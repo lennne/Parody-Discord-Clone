@@ -38,6 +38,7 @@ import { Button } from "@/components/ui/button";
 import { useParams, useRouter } from "next/navigation";
 import { useModal } from "@/hooks/use-modal-store";
 import { ChannelType } from "@prisma/client";
+import { useEffect } from "react";
 
 
 //zod schema for the form validation
@@ -52,20 +53,32 @@ const formSchema = z.object({
 });
 
 export const CreateChannelModal = () => {
-    const {isOpen, onClose, type } = useModal();
+    const {isOpen, onClose, type, data } = useModal();
 
     const router = useRouter();
     const params =   useParams();
-    const isModalOpen = isOpen && type === "createChannel";   
-
+    const isModalOpen = isOpen && type === "createChannel";  
+    
+    //extract the type of channel being passed from the calling function in server section
+    const { channelType } = data;
     //reacts hook form which is used to manage the form state
     const form = useForm({
         resolver: zodResolver(formSchema), //use the zod schema for validation
         defaultValues: {
             name: "",
-            type: ChannelType.TEXT
+            type: channelType || ChannelType.TEXT,
         }
     });
+
+    useEffect(()=> {
+        if(channelType){
+            console.log("entered chat")
+            form.setValue("type", channelType);
+        }else{
+            form.setValue("type", ChannelType.TEXT);
+        }
+
+    },[channelType, form])
 
     const isLoading = form.formState.isSubmitting; //check if the form is submitting so that we can disable the inputs and buttons
 

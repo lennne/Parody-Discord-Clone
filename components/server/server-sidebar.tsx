@@ -161,7 +161,7 @@ export const ServerSidebar = async ({serverId}: ServerSidebarProps) => {
                                {/* Beggining of the audio channels section for the server sidebar */}
                             <ServerSection
                             sectionType="channels"
-                            channelType={ChannelType.TEXT}
+                            channelType={ChannelType.AUDIO}
                             role={role}
                             label="Voice Channels"
                             />
@@ -182,7 +182,7 @@ export const ServerSidebar = async ({serverId}: ServerSidebarProps) => {
                             {/* Beggining of the video channels section for the server sidebar */}
                             <ServerSection
                             sectionType="channels"
-                            channelType={ChannelType.TEXT}
+                            channelType={ChannelType.VIDEO}
                             role={role}
                             label="Video Channels"
                             />
