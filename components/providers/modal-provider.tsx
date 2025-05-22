@@ -7,7 +7,8 @@ import { EditServerModal } from "@/components/modals/edit-server-modal";
 import { MembersModal } from "@/components/modals/members-modal";
 import { CreateChannelModal } from "@/components/modals/create-channel-modal";
 import { LeaveServerModal } from "@/components/modals/leave-server-modal";
-import { DeleteServerModal } from "../modals/delete-server-moodal";
+import { DeleteServerModal } from "../modals/delete-server-modal";
+import { DeleteChannelModal } from "../modals/delete-channel-modal";
 
 
 
@@ -32,6 +33,7 @@ import { DeleteServerModal } from "../modals/delete-server-moodal";
             <CreateChannelModal />  
             <LeaveServerModal />
             <DeleteServerModal />
+            <DeleteChannelModal />
         </>
 
 
