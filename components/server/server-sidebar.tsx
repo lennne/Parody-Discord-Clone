@@ -16,6 +16,7 @@ import { ServerSearch } from "./server-search";
 import { text } from "stream/consumers";
 import ServerSection from "./server-section";
 import ServerChannel from "./server-channel";
+import ServerMember from "./server-member";
 
 
 interface ServerSidebarProps {
@@ -191,6 +192,26 @@ export const ServerSidebar = async ({serverId}: ServerSidebarProps) => {
                                     channel={channel}
                                     role={role}
                                     server={server}
+                                />
+                            ))}
+                        </div>
+                    )}
+
+                      {/* UI for separating the members Channels */}
+                       {!!members?.length && ( 
+                        <div className="mb-2">
+                            {/* Beggining of the video channels section for the server sidebar */}
+                            <ServerSection
+                            sectionType="members"
+                            role={role}
+                            label="Members"
+                            server={server}
+                            />
+                            {members.map((member) => (
+                                <ServerMember
+                                   key={member.id}
+                                   member={member}
+                                   server={server}
                                 />
                             ))}
                         </div>
