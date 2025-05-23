@@ -72,7 +72,6 @@ export const CreateChannelModal = () => {
 
     useEffect(()=> {
         if(channelType){
-            console.log("entered chat")
             form.setValue("type", channelType);
         }else{
             form.setValue("type", ChannelType.TEXT);

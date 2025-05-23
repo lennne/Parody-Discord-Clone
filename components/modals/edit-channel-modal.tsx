@@ -57,28 +57,25 @@ export const EditChannelModal = () => {
 
     const router = useRouter();
     const params =   useParams();
-    const isModalOpen = isOpen && type === "createChannel";  
+    const isModalOpen = isOpen && type === "editChannel";  
     
     //extract the type of channel being passed from the calling function in server section
-    const { channelType } = data;
+    const { channel, server } = data;
     //reacts hook form which is used to manage the form state
     const form = useForm({
         resolver: zodResolver(formSchema), //use the zod schema for validation
         defaultValues: {
             name: "",
-            type: channelType || ChannelType.TEXT,
+            type: channel?.type || ChannelType.TEXT,
         }
-    });
+    }); 
 
     useEffect(()=> {
-        if(channelType){
-            console.log("entered chat")
-            form.setValue("type", channelType);
-        }else{
-            form.setValue("type", ChannelType.TEXT);
+        if(channel){
+            form.setValue("name", channel.name);
+            form.setValue("type", channel.type);
         }
-
-    },[channelType, form])
+    },[channel, form])
 
     const isLoading = form.formState.isSubmitting; //check if the form is submitting so that we can disable the inputs and buttons
 
@@ -86,13 +83,13 @@ export const EditChannelModal = () => {
         try{
 
             const url = qs.stringifyUrl({
-                url: "/api/channels",
-                query: {
-                    serverId: params?.serverId 
-                }
-            })
+                    url: `/api/channels/${channel?.id}`,
+                    query: {
+                        serverId: server?.id
+                    }
+                });
 
-            await axios.post(url, values);
+            await axios.patch(url, values);
             form.reset();
             router.refresh();
             onClose();
@@ -193,7 +190,7 @@ export const EditChannelModal = () => {
                                 variant={"primary"}
                                 disabled={isLoading}
                                 >
-                                    Create
+                                    Save
                                 </Button>
 
                             </DialogFooter>
