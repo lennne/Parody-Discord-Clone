@@ -29,7 +29,7 @@ const ServerChannel = ({channel, server, role}: ServerChannelProps) => {
 
     const Icon = iconMap[channel.type];
     const onClick = () => {
-        router.push(`/api/servers/${server.id}/channels/${channel.id}`);
+        router.push(`/servers/${server.id}/channels/${channel.id}`);
     }
 
     //onOpen function is still called alright but since it is affected by the global action of the button we need to stop the propagation before calling onOpen function
