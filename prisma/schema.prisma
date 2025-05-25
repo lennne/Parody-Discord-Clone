@@ -73,7 +73,7 @@ model Member{
   messages Message[] 
   
   conversationsInitiated Conversation[] @relation("MemberOne")
-  conversationsReceived Conversation[] @relation("MemberTwo") ,
+  conversationsReceived Conversation[] @relation("MemberTwo")
 
   serverId String
   server Server @relation(fields: [serverId], references: [id], onDelete: Cascade) //the serverId field in the member model references the id field in the server model
@@ -173,4 +173,6 @@ model DirectMessage{
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@index([memberId])
+  @@index([conversationId])
 }
