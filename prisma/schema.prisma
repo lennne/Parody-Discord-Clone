@@ -61,7 +61,7 @@ model Server{
 //this is an enum that defines the different roles/"types of roles" that a member can have in a server
 enum MemberRole {
   ADMIN
-  MODERATOR
+  MODERATOR 
   GUEST
 }
 
@@ -70,7 +70,11 @@ model Member{
   id String @id @default(uuid())
   role MemberRole @default(GUEST) //role is an enum that can be either ADMIN, MODERATOR, or GUEST
 
-    
+  messages Message[] 
+  
+  conversationsInitiated Conversation[] @relation("MemberOne")
+  conversationsReceived Conversation[] @relation("MemberTwo") ,
+
   serverId String
   server Server @relation(fields: [serverId], references: [id], onDelete: Cascade) //the serverId field in the member model references the id field in the server model
 
@@ -99,6 +103,8 @@ model Channel{
   profileId String
   profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
+  messages Message[]
+
   serverId String
   server Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
 
@@ -107,4 +113,64 @@ model Channel{
 
   @@index([profileId])
   @@index([serverId])
+}
+
+//message data in the database
+model Message {
+  id String @id @default(uuid())
+  content String @db.Text
+
+  fileUrl String? @db.Text
+
+  memberId String
+  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  messages Message[]
+  directMessages  DirectMessage[]
+
+  channelId String
+  channel Channel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+
+  deleted Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt 
+
+  @@index([channelId])
+  @@index([memberId])
+}
+
+//conversations model
+//which conversation the messages belong to 
+//a conversation is between two people that's why there are two members 
+model Conversation{
+   id String @id @default(uuid())
+   memberOneId String
+   memberone Member@relation("MemberOne", fields: [memberOneId], references: [id], onDelete: Cascade)
+
+   memberTwoId String
+   memberTwo Member @relation("MemberTwo", fields: [memberTwoId], references: [id], onDelete: Cascade)
+
+   @@index([memberTwoId])
+   @@unique([memberOneId, memberTwoId])
+     
+}
+
+//A DM for each person in the conversation, i believe this doesn't require order but rather it'll be rendered when the message was created and received
+model DirectMessage{
+  id String @id @default(uuid())
+  content String @db.Text
+  fileUrl String? @db.Text
+ 
+  memberId String
+  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  conversationId String
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete:Cascade)
+
+  deleted Boolean @default(false)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
 }
