@@ -1,10 +1,11 @@
 import { db } from "@/lib/db";
 
 export const getOrCreateConversation = async (memberOneId: string, memberTwoId: string) => {
+    console.log(memberOneId)
+    console.log(memberTwoId)
     let conversation = await findConversation(memberOneId, memberTwoId) || await findConversation(memberTwoId, memberOneId);
-
     if(!conversation){
-        conversation = await createNewConversation(memberOneId, memberOneId);
+        conversation = await createNewConversation(memberOneId, memberTwoId                                                                                                                          );
     }
 
     return conversation;
@@ -13,8 +14,8 @@ export const getOrCreateConversation = async (memberOneId: string, memberTwoId: 
 
 const findConversation =  async (memberOneId: string, memberTwoId: string) => {
   try {
-
-      return await db.conversation.findFirst({
+    
+    return  await db.conversation.findFirst({
         where:{
             AND: [
                 { memberOneId: memberOneId },
@@ -33,13 +34,14 @@ const findConversation =  async (memberOneId: string, memberTwoId: string) => {
                 }
             }
         }
-    });} catch{
+    });
+} catch(error){
         return null
     }
 }
 
 const createNewConversation = async (memberOneId: string, memberTwoId: string) => {
-     try{
+    try{
          return await db.conversation.create({
             data: {
                 memberOneId,
