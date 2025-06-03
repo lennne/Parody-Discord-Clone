@@ -36,6 +36,11 @@ const formSchema = z.object({
     })
 })
 
+interface FileData {
+    url?: string;
+    type?: string;
+}
+
 const MessageFileModal = () => {
 
     const { isOpen, onClose, type, data } = useModal();
@@ -104,7 +109,7 @@ const MessageFileModal = () => {
                                     <FormControl>
                                         <FileUpload 
                                             endpoint="messageFile"
-                                            value={field.value}
+                                            value={field.value as FileData}
                                             onChange={field.onChange}
                                         />
                                     </FormControl>

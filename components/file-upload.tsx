@@ -6,14 +6,14 @@ import Image from "next/image";
 
 
 interface FileData {
-    url: string;
+    url?: string;
     type?: string;
 }
 
 interface FileUploadProps {
     onChange: (fileData: FileData) => void;
     endpoint: "messageFile" | "serverImage";
-    value: FileData;
+    value: FileData | undefined;
 }
 
 //type declaration for the FileUpload component, whose type is of React.FC and takes in the FileUploadProps as a generic type
@@ -24,8 +24,7 @@ const FileUpload = ({
 }: FileUploadProps) => {
     
     
-    
-    if(value && value.type !== "pdf"){
+    if(value && value.type === "images"){
        return (
         <div className="relative h-20 w-20">
             <Image 
@@ -72,12 +71,12 @@ const FileUpload = ({
            endpoint={endpoint}
            onClientUploadComplete={(res)=>{
             const url = res?.[0].url
-            let type = "pdf"
-            if(res?.[0].type === "application/pdf"){
-                type = "pdf"
-                onChange({url, type});
+            let type = res?.[0].type;
+            if(type === "application/pdf"){
+                onChange({url, type: "pdf"});
             }else{
-                onChange({url});
+                type = "images";
+                onChange({url, type: "images"});
             }
             
            }}
