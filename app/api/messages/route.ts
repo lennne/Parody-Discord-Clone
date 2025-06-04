@@ -28,7 +28,7 @@ export async function GET(req: Request){
         if(cursor){
             messages = await db.message.findMany({
                 take: MESSAGES_BATCH,
-                skip: 1,
+                skip: 1, 
                 //start from the id for that message we're passing in cursor
                 //essentially cursor serves as the id for our current message
                 cursor: {
