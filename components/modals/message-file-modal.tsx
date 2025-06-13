@@ -80,7 +80,6 @@ const MessageFileModal = () => {
         }
 
     }
-    console.log("i always run")
 
     return  (
     <Dialog open={isModalOpen} onOpenChange={handleClose}>

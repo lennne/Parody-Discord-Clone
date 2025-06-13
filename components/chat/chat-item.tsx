@@ -2,10 +2,16 @@
 import { Member, MemberRole, Profile } from "@prisma/client"
 import { UserAvatar } from "../user-avatar";
 import { ActionToolTip } from "../action-tooltip";
-import { Edit, FileIcon, ShieldCheck, X } from "lucide-react";
+import { Edit, FileIcon, ShieldCheck, Trash, X } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Form, FormControl, FormField, FormItem } from "../ui/form";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 
 interface ChatItemProps {
     id: string;
@@ -30,6 +36,9 @@ const roleIconMap = {
     "ADMIN": <ShieldCheck className="h-4 w-4 ml-2 text-rose-500"/>
 }
 
+const formSchema = z.object({
+    content: z.string().min(1),
+});
 
 export const ChatItem = ( { 
      id,
@@ -46,6 +55,35 @@ export const ChatItem = ( {
 
 const [isEditing, setisEditing] = useState(false);
 const [isDeleting, setDeleting] = useState(false);
+
+useEffect(() => {
+    const handleKeyDown = (event: any) => {
+        if (event.key === "Escape" || event.keyCode === 27) {
+            setisEditing(false);
+        }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+})
+
+const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+        content: content
+    }
+});
+
+const onSubmit = (values:any) => {
+    console.log(values);
+}
+
+useEffect(() => {
+    form.reset({
+        content: content,
+    });
+ }, [content])
+
 const fileType = fileUrl?.split(".").pop();
 
 const isAdmin = currentMember.role === MemberRole.ADMIN;
@@ -117,6 +155,38 @@ const isImage = !isPDF && fileUrl;
                             )}
                         </p>
                     )}
+                    {!fileUrl && isEditing && (
+                        <Form {...form}>
+                            <form 
+                            className="flex items-center w-full gap-x-2 pt-2"
+                            onSubmit={form.handleSubmit(onSubmit)}>
+                                 <FormField
+                                 control={form.control}
+                                 name="content"
+                                 render={({field}) => (
+                                    <FormItem className="flex-1">
+                                        <FormControl>
+                                            <div className="relative w-full">
+                                                <Input
+                                                className="p-2 bg-zinc-200/90 dark:bg-zinc-700/75 border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 dark:text-zinc-200"
+                                                placeholder="Edited message"
+                                                {...field}
+                                                
+                                                />
+                                            </div>
+                                        </FormControl>
+                                    </FormItem>
+                                 )}
+                                 />
+                                <Button size="sm" variant="primary">
+                                    Save
+                                </Button>
+                            </form>
+                            <span className="text-[10px] mt-1 text-zinc-400">
+                                Press escape to cancel, enter to save
+                            </span>
+                        </Form>
+                    )}
                  </div>
 
             </div>
@@ -125,12 +195,19 @@ const isImage = !isPDF && fileUrl;
                         
                         {canEditMessage && (
                             <ActionToolTip label="Edit">
-                                <Edit className="cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition"/>
-                            </ActionToolTip>
+                                <Edit 
+                                onClick={() => setisEditing(true)}
+                                className="cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition"/>
+                            </ActionToolTip> 
                         )}
+                        <ActionToolTip label="Delete">
+                                <Trash className="cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition"/>
+                            </ActionToolTip>
                 </div>
             )}
             
+                            
+               
         </div>
     )
 }
