@@ -29,6 +29,8 @@ export default async function hander (
             return res.status(400).json({error: "Content Missing "})
         }
 
+        console.log(content);
+
         //confirm whether the user trying to send a message is a part of the server
         const server = await db.server.findFirst({
             where: {
@@ -82,10 +84,12 @@ export default async function hander (
             }
         });
 
+
+        
         const channelKey = `chat:${channelId}:messages`;
 
         res?.socket?.server?.io?.emit(channelKey, message);
-  
+  console.log("how long does this take");
         return res.status(200).json(message);
           
     } catch (error){

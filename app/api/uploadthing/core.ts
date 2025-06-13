@@ -8,8 +8,6 @@ const f = createUploadthing();
 const handleAuth = async () => {
     const {userId}:{userId: string | null} = await auth(); //get the userId from the auth function by destructuring it from the auth object
     if(!userId) throw new Error("Unauthorized");
-console.log("before everything");
-
     return {userId: userId};
 }
 
@@ -21,9 +19,7 @@ export const ourFileRouter = {
 
     messageFile: f(['image', 'pdf']) //accepts both image and pdf files when uploading in the chats
     .middleware(() => handleAuth())
-    .onUploadComplete(({file}) => {
-        return {type: file.type};
-    })
+    .onUploadComplete(()=> {})
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;

@@ -8,6 +8,7 @@ const MESSAGES_BATCH = 10;
 export async function GET(req: Request){
     try {
 
+        console.log("what took you so long");
         const profile = await currentProfile();
         const { searchParams } = new URL(req.url);
         
@@ -24,6 +25,7 @@ export async function GET(req: Request){
 
         let messages: Message[] = []; 
 
+         console.log("are you next");
 
         if(cursor){
             messages = await db.message.findMany({

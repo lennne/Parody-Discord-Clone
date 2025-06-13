@@ -30,16 +30,10 @@ import { useModal } from "@/hooks/use-modal-store";
 
 //zod schema for the form validation
 const formSchema = z.object({
-
-    fileUrl: z.string().min(1, {
-        message: "Attachment is required."
-    })
+    fileUrl:  z.string().min(1,{
+            message: "Attachment is required"
+    }),
 })
-
-interface FileData {
-    url?: string;
-    type?: string;
-}
 
 const MessageFileModal = () => {
 
@@ -67,10 +61,12 @@ const MessageFileModal = () => {
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try{
+            console.log("why arent you running")
             const url = qs.stringifyUrl({
                 url: apiUrl || "",
                 query, 
             });
+            console.log("are you even tryiing",)
             
             await axios.post(url,{
                  ...values,
@@ -80,11 +76,11 @@ const MessageFileModal = () => {
             router.refresh();
             handleClose();    
         }catch(error){
-            console.log(error);
+            console.log("error at ",error);
         }
 
     }
-
+    console.log("i always run")
 
     return  (
     <Dialog open={isModalOpen} onOpenChange={handleClose}>
@@ -109,7 +105,7 @@ const MessageFileModal = () => {
                                     <FormControl>
                                         <FileUpload 
                                             endpoint="messageFile"
-                                            value={field.value as FileData}
+                                            value={field.value}
                                             onChange={field.onChange}
                                         />
                                     </FormControl>
@@ -120,12 +116,12 @@ const MessageFileModal = () => {
                        
                     </div>
                     <DialogFooter className="bg-gray-100 px-6 py-4">
-                        <Button 
+                        <Button
                         variant={"primary"}
                         disabled={isLoading}
                         >
                             Send
-                        </Button>
+                       </Button>
 
                     </DialogFooter>
                 </form>

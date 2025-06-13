@@ -1,19 +1,14 @@
 "use client";
-import { UploadButton, UploadDropzone } from "@/lib/uploadthing";
+import {  UploadDropzone } from "@/lib/uploadthing";
 import "@uploadthing/react/styles.css";
 import { FileIcon, X } from "lucide-react";
 import Image from "next/image";
 
 
-interface FileData {
-    url?: string;
-    type?: string;
-}
-
 interface FileUploadProps {
-    onChange: (fileData: FileData) => void;
+    onChange: (url: string) => void;
     endpoint: "messageFile" | "serverImage";
-    value: FileData | undefined;
+    value: string
 }
 
 //type declaration for the FileUpload component, whose type is of React.FC and takes in the FileUploadProps as a generic type
@@ -23,17 +18,19 @@ const FileUpload = ({
     endpoint
 }: FileUploadProps) => {
     
-    
-    if(value && value.type === "images"){
+    const type = value.split('/').pop();
+    value = value.split('/').slice(0, -1).join('/');
+  
+    if(type === "images"){
        return (
         <div className="relative h-20 w-20">
             <Image 
             fill
-            src={value.url as string}
+            src={value as string}
             alt="Upload"
             className="rounded-full"
             />
-        <button onClick={()=> onChange({url:""})}
+        <button onClick={()=> onChange("")}
             className="bg-rose-500 text-white p-1 rounded-full absolute top-0 right-0 shadow-sm"
             type="button"
             >
@@ -43,19 +40,19 @@ const FileUpload = ({
         )
     }
 
-    if(value && value.type === "pdf"){
+    if(type === "pdf"){
         return (
             <div className="relative flex items-center p-2 mt-2 rounded-md bg-background/10 ">
                 <FileIcon className="h-10 w-10 fill-indigo-200 stroke-indigo-400"/>
                 <a 
-                href={value.url}
+                href={value}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="ml-2 text-sm text-indigo-500 w-[300px] break-words dark:text-indigo-400 hover:underline">
-                    {value.url}
+                    {value}
                 </a>
                 <button 
-                onClick={()=> onChange({url:""})}
+                onClick={()=> onChange("")}
                 className="bg-rose-500 text-white p-1 rounded-full absolute -top-2 -right-2 shadow-sm"
                 type="button"
                 >
@@ -70,18 +67,22 @@ const FileUpload = ({
            
            endpoint={endpoint}
            onClientUploadComplete={(res)=>{
+            console.log("i'm here now")
             const url = res?.[0].url
             let type = res?.[0].type;
+            
             if(type === "application/pdf"){
-                onChange({url, type: "pdf"});
+                onChange(url + "/pdf");
             }else{
                 type = "images";
-                onChange({url, type: "images"});
+                onChange(url + "/images");
             }
-            
+            console.log("the type is", type);
+            console.log("end of execution")
+            return;
            }}
            onUploadError={(error: Error)=> {
-            console.log(error);
+            console.log("was there an error",error);
            } }
            />
         
