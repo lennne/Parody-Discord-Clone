@@ -14,6 +14,7 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import qs from "query-string";
 import axios from "axios";
+import { useModal } from "@/hooks/use-modal-store";
 
 interface ChatItemProps {
     id: string;
@@ -56,7 +57,7 @@ export const ChatItem = ( {
 }  : ChatItemProps) => {
 
 const [isEditing, setisEditing] = useState(false);
-const [isDeleting, setDeleting] = useState(false);
+const { onOpen } = useModal();
 
 useEffect(() => {
     const handleKeyDown = (event: any) => {
@@ -220,7 +221,12 @@ const isImage = !isPDF && fileUrl;
                             </ActionToolTip> 
                         )}
                         <ActionToolTip label="Delete">
-                                <Trash className="cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition"/>
+                                <Trash 
+                                onClick={() => onOpen("deleteMessage", {
+                                    apiUrl: `${socketUrl}/${id}`,
+                                    query: socketQuery,
+                                })}
+                                className="cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition"/>
                             </ActionToolTip>
                 </div>
             )}
