@@ -3,7 +3,7 @@ import { db } from "@/lib/db";
 import { NextApiResponseServerIo } from "@/types";
 import { NextApiRequest } from "next";
 
-export default async function hander (
+export default async function handler (
     req: NextApiRequest,
     res: NextApiResponseServerIo
 ){
@@ -89,9 +89,8 @@ export default async function hander (
         const channelKey = `chat:${channelId}:messages`;
 
         res?.socket?.server?.io?.emit(channelKey, message);
-  console.log("how long does this take");
+        console.log("how long does this take");
         return res.status(200).json(message);
-          
     } catch (error){
         console.log("[MESSAGES_PORT]", error);
         return res.status(500).json({message: "Internal Error"});

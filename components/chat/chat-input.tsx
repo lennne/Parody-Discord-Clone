@@ -48,10 +48,12 @@ export const ChatInput = ({
                 url: apiUrl,
                 query,
             });
-
+      
             await axios.post(url, value);
+      console.log('just refreshed again')
             form.reset();
             router.refresh();
+            
         }catch(error){
             console.log(error);
         }
