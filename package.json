@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "prebuild": "npm i -D prisma -f && npm audit fix -f && npx prisma init && npx prisma generate && npx prisma db push",
+    "prebuild": "npm audit fix -f && npx prisma generate && npx prisma db push",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
